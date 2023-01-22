@@ -5,7 +5,9 @@ import sys
 def tab_cnt(txt: str) -> int:
 	"""Count the number of prefix tabs"""
 	
-	if txt[0] == '\t':
+	if len(txt) == 0:
+		return 0
+	elif txt[0] == '\t':
 		return len(txt) - len(txt.lstrip())
 	else:
 		return (len(txt) - len(txt.lstrip()))//4
