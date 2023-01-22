@@ -5,22 +5,14 @@ import sys
 def tab_cnt(txt: str) -> int:
 	"""Count the number of prefix tabs"""
 	
-	count = 0
-
-	for i in txt:
-		if i == '\t':
-			count += 1
-		else:
-			break
-
-	return count
+	return len(txt) - len(txt.lstrip())
 
 
 
 def is_empty(txt: str) -> bool:
 	"""Check whether a string consists of whitespaces and tabs only"""
 
-	return (txt.replace('\t', '') + ' ').isspace()
+	return len(txt.strip()) == 0
 
 
 
@@ -71,14 +63,14 @@ def uncurse(txt: str) -> str:
 
 
 
-		if line.replace('\t', ''.startswith('#')):
+		if line.replace('\t', '').startswith('#'):
 			final += line + '\n'
 			continue
 
 
 
 		if '//' in line:
-			line = line.split('//')[0]
+			line = line.split('//')[0].rstrip()
 
 			if is_empty(line):
 				continue
@@ -134,4 +126,4 @@ if __name__ == '__main__':
 
 	else:
 		print('[!] Too many arguments [!]')
-# The last line number is the square of a repunit ;) ... HOLD UP
+# The last line number is a power of 2, nice ;) ... HOLD UP
