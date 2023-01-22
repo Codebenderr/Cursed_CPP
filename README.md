@@ -1,4 +1,4 @@
-# Cursed_CPP
+# Cursed C++
 Ever wanted to write CPP with pythonic syntax? Now you can!
 
 ## Usage
