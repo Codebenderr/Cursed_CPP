@@ -2,7 +2,7 @@ import sys
 
 
 
-def tab_cnt(txt: str) -> str:
+def tab_cnt(txt: str) -> int:
 	"""Count the number of prefix tabs"""
 	
 	count = 0
@@ -17,7 +17,7 @@ def tab_cnt(txt: str) -> str:
 
 
 
-def is_empty(txt: str) -> str:
+def is_empty(txt: str) -> bool:
 	"""Check whether a string consists of whitespaces and tabs only"""
 
 	return (txt.replace('\t', '') + ' ').isspace()
