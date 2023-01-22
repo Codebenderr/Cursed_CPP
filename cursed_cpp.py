@@ -119,3 +119,4 @@ if __name__ == '__main__':
 
 	else:
 		print('[!] Too many arguments [!]')
+# The last line number is the square of a repunit ;) ... HOLD UP
