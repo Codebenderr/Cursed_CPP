@@ -5,7 +5,10 @@ import sys
 def tab_cnt(txt: str) -> int:
 	"""Count the number of prefix tabs"""
 	
-	return len(txt) - len(txt.lstrip())
+	if txt[0] == '\t':
+		return len(txt) - len(txt.lstrip())
+	else:
+		return (len(txt) - len(txt.lstrip()))//4
 
 
 
@@ -49,9 +52,6 @@ def uncurse(txt: str) -> str:
 	lines.append('')
 
 
-	tab_cnts = [tab_cnt(line) for line in lines]
-
-
 	final = ''
 
 
@@ -63,7 +63,7 @@ def uncurse(txt: str) -> str:
 
 
 
-		if line.replace('\t', '').startswith('#'):
+		if line.lstrip().startswith('#'):
 			final += line + '\n'
 			continue
 
@@ -77,9 +77,13 @@ def uncurse(txt: str) -> str:
 
 
 
-		for keywrd in ['for', 'if', 'while', 'elif']:
+		line_tab_cnt = tab_cnt(line)
+
+
+
+		for keywrd in ['for', 'if', 'while', 'else if', 'switch']:
 			if keywrd in line:
-				line = line.replace(keywrd, '').replace('\t', '').strip()
+				line = line.replace(keywrd, '').strip()
 
 				if not line.startswith('('):
 					line = '(' + line
@@ -87,20 +91,18 @@ def uncurse(txt: str) -> str:
 				if not line.endswith(')'):
 					line += ')'
 
-				line = tab_cnts[i]*'\t' + keywrd + ' ' + line
-
-				break
+				line = line_tab_cnt*'\t' + keywrd + ' ' + line
 
 
 
-		diff = tab_cnts[i+1] - tab_cnts[i]
+		diff = tab_cnt(lines[i+1]) - line_tab_cnt
 
 		if diff > 0:
 			final += line + '\n'
-			final += format_opening_braces(tab_cnts[i], diff)
+			final += format_opening_braces(line_tab_cnt, diff)
 		elif diff < 0:
 			final += line + ';\n'
-			final += format_closing_braces(tab_cnts[i]-1, -diff)
+			final += format_closing_braces(line_tab_cnt-1, -diff)
 		else:
 			final += line + ';\n'
 
@@ -126,4 +128,3 @@ if __name__ == '__main__':
 
 	else:
 		print('[!] Too many arguments [!]')
-# The last line number is a power of 2, nice ;) ... HOLD UP
