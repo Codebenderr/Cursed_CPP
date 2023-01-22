@@ -18,8 +18,11 @@ pythonified_code = cursed_cpp.pythonify('code goes here')
 
 ### As a standalone application
 
-#### With a filename argument
-You can specify a filename argument which the program will read and then make a new file in the same directory called `cursed_filename.cpp`.
+#### With a single filename argument
+When a single filename argument is specified, the program will pythonify that file's content and put it in a new file in the same directory named `cursed_filename.cpp`.
+
+#### With 2 filename arguments
+When 2 filename arguments are specified, the program will pythonify the content of the file in the first filename argument, then put it in a new file in the same directory named as the second filename argument.
 
 #### Without arguments
 If you run the code as a script without any arguments, the content of the clipboard will be pythonified and set as the new clipboard content.
