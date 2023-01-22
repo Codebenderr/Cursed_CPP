@@ -7,7 +7,7 @@ Ever wanted to write CPP with pythonic syntax? Now you can!
 
 You can use this like a regular python module, e.g.
 
-```
+```python
 import cursed_cpp
 
 pythonify('code goes here')
