@@ -1,6 +1,9 @@
 # Cursed C++
 Ever wanted to write C++ with pythonic syntax? Now you can!
 
+## Motivation
+I was bored, had nothing better to do and let's admit it, Python's indentation is awesome.
+
 ## Usage
 
 ### As a module
