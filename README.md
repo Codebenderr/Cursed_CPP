@@ -3,6 +3,9 @@ Ever wanted to write C++ with pythonic syntax?
 
 ## Motivation
 I was bored, had nothing better to do and let's admit it, Python's indentation is awesome.
+```python
+'motivation' is None
+```
 
 ## Usage
 
