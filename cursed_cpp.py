@@ -53,7 +53,7 @@ def uncurse(txt: str) -> str:
 
 
 	lines = txt.splitlines()
-	lines = [line for line in lines if not is_empty(line)]
+	lines = [line for line in lines if (not is_empty(line)) and (not line.replace('\t', '').startswith('#'))]
 	lines.append('')
 
 
@@ -68,21 +68,22 @@ def uncurse(txt: str) -> str:
 		if i == len(lines)-1:
 			break
 
-		if line.replace('\t', '').startswith('#'):
-			continue
 
 
-		"""
 		for keywrd in ['for', 'if', 'while', 'elif']:
 			if keywrd in line:
-				line = line.replace(keywrd, '')
-				stripped_line = line.strip()
-				if not stripped_line.endswith(')'):
-					line += ')'
+				line = line.replace(keywrd, '').replace('\t', '').strip()
+
 				if not line.startswith('('):
 					line = '(' + line
-				line = keywrd + ' ' + line
-		"""
+
+				if not line.endswith(')'):
+					line += ')'
+
+				line = tab_cnts[i]*'\t' + keywrd + ' ' + line
+
+				break
+
 
 
 		diff = tab_cnts[i+1] - tab_cnts[i]
