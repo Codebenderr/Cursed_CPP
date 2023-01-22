@@ -60,7 +60,7 @@ int main()
   
     return 0
 ```
-Notice how there is no `:` at the end of the for loop unlike in Python, this is because I see them as redundant.
+Notice how there is no `:` at the end of the for loop unlike Python, this is because I see them as redundant.
 
 Additionally, the parentheses in `if`, `else if`, `for` and `while` statements can be omitted if desired.
 So the above code can further be reduced to
