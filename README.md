@@ -10,7 +10,7 @@ You can use this like a regular python module, e.g.
 ```python
 import cursed_cpp
 
-pythonify('code goes here')
+cursed_cpp.pythonify('code goes here')
 ```
 
 ### As a standalone application
