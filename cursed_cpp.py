@@ -45,7 +45,7 @@ def format_opening_braces(tab: int, n = 1):
 
 
 
-def pythonify(txt: str):
+def uncurse(txt: str):
 	"""Convert a pythonic CPP source into a regular CPP source"""
 
 
@@ -102,7 +102,11 @@ if __name__ == '__main__':
 	if len(sys.argv) > 1:
 		with open(sys.argv[1], 'r') as f:
 			with open('cursed_' + sys.argv[1], 'w') as f2:
-				f2.write(pythonify(f.read()))
+				f2.write(uncurse(f.read()))
+	elif len(sys.argv) > 2:
+		with open(sys.argv[1], 'r') as f:
+			with open(sys.argv[2], 'w') as f2:
+				f2.write(uncurse(f.read()))
 	else:
 		import clipboard
-		clipboard.copy(pythonify(clipboard.paste()))
+		clipboard.copy(uncurse(clipboard.paste()))
