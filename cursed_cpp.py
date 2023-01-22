@@ -102,15 +102,19 @@ def uncurse(txt: str) -> str:
 
 
 if __name__ == '__main__':
-	if len(sys.argv) > 1:
+	if len(sys.argv) == 1:
+		import clipboard
+		clipboard.copy(uncurse(clipboard.paste()))
+
+	elif len(sys.argv) == 2:
 		with open(sys.argv[1], 'r') as f:
-			with open('cursed_' + sys.argv[1], 'w') as f2:
+			with open('uncursed_' + sys.argv[1], 'w') as f2:
 				f2.write(uncurse(f.read()))
 
-	elif len(sys.argv) > 2:
+	elif len(sys.argv) == 3:
 		with open(sys.argv[1], 'r') as f:
 			with open(sys.argv[2], 'w') as f2:
 				f2.write(uncurse(f.read()))
+
 	else:
-		import clipboard
-		clipboard.copy(uncurse(clipboard.paste()))
+		print('[!] Too many arguments [!]')
