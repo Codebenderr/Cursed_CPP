@@ -13,19 +13,19 @@ You can use this like a regular python module, e.g.
 ```python
 import cursed_cpp
 
-pythonified_code = cursed_cpp.pythonify('code goes here')
+uncursed_code = cursed_cpp.uncurse('code goes here')
 ```
 
 ### As a standalone application
 
 #### With a single filename argument
-When a single filename argument is specified, the program will pythonify that file's content and put it in a new file in the same directory named `cursed_filename.cpp`.
+When a single filename argument is specified, the program will uncurse that file's content and put it in a new file in the same directory named `cursed_filename.cpp`.
 
 #### With 2 filename arguments
-When 2 filename arguments are specified, the program will pythonify the content of the file in the first filename argument, then put it in a new file in the same directory named as the second filename argument.
+When 2 filename arguments are specified, the program will uncurse the content of the file in the first filename argument, then put it in a new file in the same directory named as the second filename argument.
 
 #### Without arguments
-If you run the code as a script without any arguments, the content of the clipboard will be pythonified and set as the new clipboard content.
+If you run the code as a script without any arguments, the content of the clipboard will be uncursed and set as the new clipboard content.
 Note that this requires the python library `clipboard` to be installed.
 
 
