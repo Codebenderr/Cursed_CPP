@@ -49,11 +49,11 @@ def format_opening_braces(tab: int, n = 1) -> str:
 
 
 def uncurse(txt: str) -> str:
-	"""Convert a pythonic CPP source into a regular CPP source"""
+	"""Convert a cursed CPP source into an uncursed CPP source"""
 
 
 	lines = txt.splitlines()
-	lines = [line for line in lines if (not is_empty(line)) and (not line.replace('\t', '').startswith('#'))]
+	lines = [line for line in lines if not is_empty(line)]
 	lines.append('')
 
 
@@ -65,8 +65,23 @@ def uncurse(txt: str) -> str:
 
 	for i, line in enumerate(lines):
 
+
 		if i == len(lines)-1:
 			break
+
+
+
+		if line.replace('\t', ''.startswith('#')):
+			final += line + '\n'
+			continue
+
+
+
+		if '//' in line:
+			line = line.split('//')[0]
+
+			if is_empty(line):
+				continue
 
 
 
