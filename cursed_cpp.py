@@ -17,7 +17,7 @@ def tab_cnt(txt: str) -> int:
 def is_empty(txt: str) -> bool:
 	"""Check whether a string consists of whitespaces and tabs only"""
 
-	return len(txt.strip()) == 0
+	return len(txt) == 0 or txt.isspace()
 
 
 
@@ -45,6 +45,16 @@ def format_opening_braces(tab: int, n = 1) -> str:
 
 
 
+def _enumerate(seq):
+	"""The same as the enumerate() function but the last element is not included"""
+
+	for i, v in enumerate(seq):
+
+		if i != len(seq)-1:
+			yield i, v
+
+
+
 def uncurse(txt: str) -> str:
 	"""Convert a cursed CPP source into an uncursed CPP source"""
 
@@ -57,12 +67,7 @@ def uncurse(txt: str) -> str:
 	final = ''
 
 
-	for i, line in enumerate(lines):
-
-
-		if i == len(lines)-1:
-			break
-
+	for i, line in _enumerate(lines):
 
 
 		if line.lstrip().startswith('#'):
@@ -83,7 +88,7 @@ def uncurse(txt: str) -> str:
 
 
 
-		for keywrd in ['for', 'if', 'while', 'else if', 'switch']:
+		for keywrd in ['for', 'else if', 'if', 'while', 'switch']:
 			if keywrd in line:
 				line = line.replace(keywrd, '').strip()
 
@@ -94,6 +99,8 @@ def uncurse(txt: str) -> str:
 					line += ')'
 
 				line = line_tab_cnt*'\t' + keywrd + ' ' + line
+
+				break
 
 
 
