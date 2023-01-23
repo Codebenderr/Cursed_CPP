@@ -85,7 +85,7 @@ int main()
   
     return 0
 ```
-However, this is not recommended as it usually makes code less readable, but there's the option to leave the first parenthesis and omit only the second parenthesis, which makes the code a bit more readable:
+However, this is not recommended as it usually makes code less readable, but there's always the option to leave the first parenthesis and omit only the second parenthesis ;)
 ```cpp
 #include <iostream>
 using namespace std
