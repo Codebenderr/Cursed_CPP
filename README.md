@@ -2,7 +2,7 @@
 Ever wanted to write C++ with pythonic syntax?
 
 ## Motivation
-I was bored, had nothing better to do and let's admit it, Python's indentation is awesome.
+I was bored, had nothing better to do. In short:
 ```python
 'motivation' is None
 ```
