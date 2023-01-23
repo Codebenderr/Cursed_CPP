@@ -157,10 +157,21 @@ def uncurse(txt: str) -> str:
 			final += line + '\n'
 			final += format_opening_braces(line_tab_cnt, diff)
 		elif diff < 0:
-			final += line + ';\n'
+
+			if line.rstrip().endswith(';'):
+				final += line + '\n'
+			else:
+				final += line + ';\n'
+
+
 			final += format_closing_braces(line_tab_cnt-1, -diff)
 		else:
-			final += line + ';\n'
+
+			if line.rstrip().endswith(';'):
+				final += line + '\n'
+			else:
+				final += line + ';\n'
+
 
 
 	return final
