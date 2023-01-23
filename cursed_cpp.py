@@ -14,6 +14,7 @@ def tab_cnt(txt: str) -> int:
 
 
 
+
 def is_empty(txt: str) -> bool:
 	"""Check whether a string consists of whitespaces and tabs only"""
 
@@ -21,8 +22,9 @@ def is_empty(txt: str) -> bool:
 
 
 
+
 def format_closing_braces(tab: int, n = 1) -> str:
-	"""Format descending '}' characters starting from 'tab'"""
+	"""Format descending '}' characters starting from 'tab' """
 
 	_str = ''
 
@@ -33,8 +35,9 @@ def format_closing_braces(tab: int, n = 1) -> str:
 
 
 
+
 def format_opening_braces(tab: int, n = 1) -> str:
-	"""Format ascending '{' characters starting from 'tab'"""
+	"""Format ascending '{' characters starting from 'tab' """
 
 	_str = ''
 
@@ -42,6 +45,7 @@ def format_opening_braces(tab: int, n = 1) -> str:
 		_str += (tab + i)*'\t' + '{\n'
 
 	return _str
+
 
 
 
@@ -55,11 +59,62 @@ def _enumerate(seq, n):
 
 
 
+
+def is_tabs_spaces_mixed(line: str) -> bool:
+	"""Check whether there are both spaces and tabs in the prefix of a line"""
+
+
+	tabs = False
+	spaces = False
+
+
+	for i in line:
+		if i == '\t':
+			tabs = True
+		elif i == ' ':
+			spaces = True
+		else:
+			break
+
+
+	return tabs and spaces
+
+
+
+
+def error_detection(txt: str) -> tuple[bool, int]:
+	"""Check whether there are any tabs-spaces mixing errors in the cursed CPP source"""
+
+
+	for i, line in enumerate(txt.splitlines()):
+		if not is_empty(line):
+			if is_tabs_spaces_mixed(line):
+
+				return (True, i+1)
+
+	return (False, -1)
+
+
+
+
 def uncurse(txt: str) -> str:
 	"""Convert a cursed CPP source into an uncursed CPP source"""
 
 
+
+	error_return = error_detection(txt)
+
+	if error_return[0] == True:
+
+		print('\u001b[31m' + f'\n[!] Error: Mixed tabs and spaces on line {error_return[1]}' + '\u001b[0m')
+
+		return f'[!] Error: Mixed tabs and spaces on line {error_return[1]}'
+
+
+
+
 	lines = txt.splitlines()
+	lines = [line.split('//')[0].rstrip() for line in lines]
 	lines = [line for line in lines if not is_empty(line)]
 	lines.append('')
 
@@ -76,14 +131,6 @@ def uncurse(txt: str) -> str:
 
 
 
-		if '//' in line:
-			line = line.split('//')[0].rstrip()
-
-			if is_empty(line):
-				continue
-
-
-
 		line_tab_cnt = tab_cnt(line)
 
 
@@ -96,7 +143,7 @@ def uncurse(txt: str) -> str:
 					line = '(' + line
 
 				if not line.endswith(')'):
-					line += ')'
+					line = line + ')'
 
 				line = line_tab_cnt*'\t' + keywrd + ' ' + line
 
@@ -120,6 +167,8 @@ def uncurse(txt: str) -> str:
 
 
 
+
+
 if __name__ == '__main__':
 	if len(sys.argv) == 1:
 		import clipboard
@@ -136,4 +185,4 @@ if __name__ == '__main__':
 				f2.write(uncurse(f.read()))
 
 	else:
-		print('[!] Too many arguments [!]')
+		print('\u001b[31m' + '\n[!] Too many arguments [!]' + '\u001b[0m')
