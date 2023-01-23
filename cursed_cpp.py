@@ -45,12 +45,12 @@ def format_opening_braces(tab: int, n = 1) -> str:
 
 
 
-def _enumerate(seq):
-	"""The same as the enumerate() function but the last element is not included"""
+def _enumerate(seq, n):
+	"""The same as the enumerate() function but the sequence ends at index n (n not included)"""
 
 	for i, v in enumerate(seq):
 
-		if i != len(seq)-1:
+		if i < len(seq)-1:
 			yield i, v
 
 
@@ -67,7 +67,7 @@ def uncurse(txt: str) -> str:
 	final = ''
 
 
-	for i, line in _enumerate(lines):
+	for i, line in _enumerate(lines, len(lines)-1):
 
 
 		if line.lstrip().startswith('#'):
