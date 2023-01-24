@@ -2,16 +2,18 @@ import sys
 
 
 
-def tab_cnt(txt):
-	
+def prefix_tab_cnt(txt):
+
+		if len( txt.strip() ) == 0:
+			return 0
+
 		if txt.startswith('\t'):
 			return len(txt) - len(txt.lstrip())
 
-		elif txt.startswith(' '):
+		if txt.startswith(' '):
 			return (len(txt) - len(txt.lstrip()))//4
 
-		else:
-			return 0
+		return 0
 
 
 
@@ -24,7 +26,19 @@ def semicolonify(txt):
 
 
 	for i, line in enumerate(lines):
-		if ( line.strip() in ('{', '}') ):
+
+		if line.strip() == '{':
+			for x in range(i-1, -1, -1):
+				if len( final[x].strip() ) > 0:
+
+					if final[x].rstrip().endswith(';'):
+						final[x] = final[x].rstrip()[0:-1]
+
+						break
+
+			final.append(line)
+
+		elif line.strip() == '}':
 			final.append(line)
 
 		elif line.lstrip().startswith('#'):
@@ -32,8 +46,6 @@ def semicolonify(txt):
 
 		elif len( line.strip() ) == 0:
 			final.append(line)
-
-		elif i < len(lines)-1 and prefix_tab_cnt(lines[i+1])
 
 		else:
 
@@ -44,7 +56,9 @@ def semicolonify(txt):
 				final.append(line + ';')
 
 
+
 	return '\n'.join(final)
+
 
 
 
