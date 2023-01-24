@@ -34,7 +34,7 @@ def semicolonify(txt):
 					if final[x].rstrip().endswith(';'):
 						final[x] = final[x].rstrip()[0:-1]
 
-						break
+					break
 
 			final.append(line)
 
