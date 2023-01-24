@@ -2,185 +2,131 @@ import sys
 
 
 
-def tab_cnt(txt: str) -> int:
-	"""Count the number of prefix tabs"""
+def tab_cnt(txt):
 	
-	if len(txt) == 0:
-		return 0
-	elif txt[0] == '\t':
-		return len(txt) - len(txt.lstrip())
-	else:
-		return (len(txt) - len(txt.lstrip()))//4
+		if txt.startswith('\t'):
+			return len(txt) - len(txt.lstrip())
 
+		elif txt.startswith(' '):
+			return (len(txt) - len(txt.lstrip()))//4
 
-
-
-def is_empty(txt: str) -> bool:
-	"""Check whether a string consists of whitespaces and tabs only"""
-
-	return len(txt) == 0 or txt.isspace()
-
-
-
-
-def format_closing_braces(tab: int, n = 1) -> str:
-	"""Format descending '}' characters starting from 'tab' """
-
-	_str = ''
-
-	for i in range(n):
-		_str += (tab - i)*'\t' + '}\n'
-
-	return _str
-
-
-
-
-def format_opening_braces(tab: int, n = 1) -> str:
-	"""Format ascending '{' characters starting from 'tab' """
-
-	_str = ''
-
-	for i in range(n):
-		_str += (tab + i)*'\t' + '{\n'
-
-	return _str
-
-
-
-
-def _enumerate(seq, n):
-	"""The same as the enumerate() function but the sequence ends at index n (n not included)"""
-
-	for i, v in enumerate(seq):
-
-		if i < len(seq)-1:
-			yield i, v
-
-
-
-
-def is_tabs_spaces_mixed(line: str) -> bool:
-	"""Check whether there are both spaces and tabs in the prefix of a line"""
-
-
-	tabs = False
-	spaces = False
-
-
-	for i in line:
-		if i == '\t':
-			tabs = True
-		elif i == ' ':
-			spaces = True
 		else:
-			break
-
-
-	return tabs and spaces
+			return 0
 
 
 
 
-def error_detection(txt: str) -> tuple[bool, int]:
-	"""Check whether there are any tabs-spaces mixing errors in the cursed CPP source"""
+def semicolonify(txt):
+
+	lines = txt.splitlines()
+
+	final = []
 
 
-	for i, line in enumerate(txt.splitlines()):
-		if not is_empty(line):
-			if is_tabs_spaces_mixed(line):
+	for i, line in enumerate(lines):
+		if ( line.strip() in ('{', '}') ):
+			final.append(line)
 
-				return (True, i+1)
+		elif line.lstrip().startswith('#'):
+			final.append(line)
 
-	return (False, -1)
+		elif len( line.strip() ) == 0:
+			final.append(line)
+
+		elif i < len(lines)-1 and prefix_tab_cnt(lines[i+1])
+
+		else:
+
+			if line.rstrip().endswith(';'):
+				final.append(line)
+
+			else:
+				final.append(line + ';')
+
+
+	return '\n'.join(final)
 
 
 
-
-def uncurse(txt: str) -> str:
-	"""Convert a cursed CPP source into an uncursed CPP source"""
+def bracify(txt):
 
 
+	def format_braces(n1, n2, brace_type):
 
-	error_return = error_detection(txt)
+		final = []
 
-	if error_return[0] == True:
+		if n1 <= n2:
+			for i in range(n1, n2):
+				final.append(i*'\t' + brace_type)
 
-		print('\u001b[31m' + f'\n[!] Error: Mixed tabs and spaces on line {error_return[1]}' + '\u001b[0m')
+		else:
+			for i in range(n1, n2, -1):
+				final.append(i*'\t' + brace_type)
 
-		return f'[!] Error: Mixed tabs and spaces on line {error_return[1]}'
-
+		return final
 
 
 
 	lines = txt.splitlines()
-	lines = [line.split('//')[0].rstrip() for line in lines]
-	lines = [line for line in lines if not is_empty(line)]
 	lines.append('')
 
 
-	final = ''
+	final = []
 
 
-	for i, line in _enumerate(lines, len(lines)-1):
+	for i, line in enumerate(lines):
 
+		if i == 0:
+			last_tab_cnt = prefix_tab_cnt(line)
+			continue
 
-		if line.lstrip().startswith('#'):
-			final += line + '\n'
+		if len( line.strip() ) == 0 and i != len(lines)-1:
+			final.append(line)
 			continue
 
 
-
-		line_tab_cnt = tab_cnt(line)
-
+		line_tab_cnt = prefix_tab_cnt(line)
 
 
-		for keywrd in ['for', 'else if', 'if', 'while', 'switch']:
-			if keywrd in line:
-				line = line.replace(keywrd, '').strip()
+		diff = line_tab_cnt - last_tab_cnt
 
-				if not line.startswith('('):
-					line = '(' + line
-
-				if not line.endswith(')'):
-					line = line + ')'
-
-				line = line_tab_cnt*'\t' + keywrd + ' ' + line
-
-				break
-
-
-
-		diff = tab_cnt(lines[i+1]) - line_tab_cnt
 
 		if diff > 0:
-			final += line + '\n'
-			final += format_opening_braces(line_tab_cnt, diff)
+
+			final.extend(format_braces(last_tab_cnt, line_tab_cnt, '{'))
+			final.append(line)
+
 		elif diff < 0:
 
-			if line.rstrip().endswith(';'):
-				final += line + '\n'
-			else:
-				final += line + ';\n'
+			final.extend(format_braces(last_tab_cnt-1, line_tab_cnt-1, '}'))
+			final.append(line)
 
-
-			final += format_closing_braces(line_tab_cnt-1, -diff)
 		else:
-
-			if line.rstrip().endswith(';'):
-				final += line + '\n'
-			else:
-				final += line + ';\n'
+			final.append(line)
 
 
+		last_tab_cnt = line_tab_cnt
 
-	return final
+
+	return '\n'.join(final)
+
+
+
+
+
+def uncurse(txt):
+	
+	txt = bracify(txt)
+	txt = semicolonify(txt)
+
+	return txt
 
 
 
 
 
 if __name__ == '__main__':
+
 	if len(sys.argv) == 1:
 		import clipboard
 		clipboard.copy(uncurse(clipboard.paste()))
@@ -196,4 +142,4 @@ if __name__ == '__main__':
 				f2.write(uncurse(f.read()))
 
 	else:
-		print('\u001b[31m' + '\n[!] Too many arguments [!]' + '\u001b[0m')
+		print('\u001b[31m' + '\n[!] Invalid number of arguments [!]' + '\u001b[0m')
