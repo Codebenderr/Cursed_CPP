@@ -70,7 +70,7 @@ int main()
 ```
 Notice how there is no `:` at the end of the for loop unlike Python, this is because I see them as redundant.
 
-Additionally, the parentheses in `if`, `else if`, `for` and `while` statements can be omitted if desired.
+The parentheses in `if`, `else if`, `for` and `while` statements can be omitted if desired.
 So the above code can further be reduced to:
 ```cpp
 #include <iostream>
