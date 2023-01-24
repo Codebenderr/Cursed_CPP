@@ -17,13 +17,11 @@ def prefix_tab_cnt(txt):
 
 
 
-
 def semicolonify(txt):
 
 	lines = txt.splitlines()
 
 	final = []
-
 
 	for i, line in enumerate(lines):
 
@@ -56,14 +54,11 @@ def semicolonify(txt):
 				final.append(line + ';')
 
 
-
 	return '\n'.join(final)
 
 
 
-
 def bracify(txt):
-
 
 	def format_braces(n1, n2, brace_type):
 
@@ -80,13 +75,10 @@ def bracify(txt):
 		return final
 
 
-
 	lines = txt.splitlines()
 	lines.append('')
 
-
 	final = []
-
 
 	for i, line in enumerate(lines):
 
@@ -98,12 +90,9 @@ def bracify(txt):
 			final.append(line)
 			continue
 
-
 		line_tab_cnt = prefix_tab_cnt(line)
 
-
 		diff = line_tab_cnt - last_tab_cnt
-
 
 		if diff > 0:
 
@@ -121,9 +110,7 @@ def bracify(txt):
 
 		last_tab_cnt = line_tab_cnt
 
-
 	return '\n'.join(final)
-
 
 
 
@@ -134,7 +121,6 @@ def uncurse(txt):
 	txt = semicolonify(txt)
 
 	return txt
-
 
 
 
