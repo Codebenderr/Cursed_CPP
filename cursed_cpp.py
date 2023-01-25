@@ -1,19 +1,13 @@
 import sys
 
 
+def uncommentify(txt):
+	
+	txt = '\n'.join([line.split('//')[0].rstrip() for line in txt.splitlines()])
 
-def prefix_tab_cnt(txt):
+	txt = '\n'.join([part.split('/*')[0] for part in txt.split('*/')])
 
-		if len( txt.strip() ) == 0:
-			return 0
-
-		if txt.startswith('\t'):
-			return len(txt) - len(txt.lstrip())
-
-		if txt.startswith(' '):
-			return (len(txt) - len(txt.lstrip()))//4
-
-		return 0
+	return txt
 
 
 
@@ -25,24 +19,13 @@ def semicolonify(txt):
 
 	for i, line in enumerate(lines):
 
-		if line.strip() == '{':
-			for x in range(i-1, -1, -1):
-				if len( final[x].strip() ) > 0:
-
-					if final[x].rstrip().endswith(';'):
-						final[x] = final[x].rstrip()[0:-1]
-
-					break
-
-			final.append(line)
-
-		elif line.strip() == '}':
+		if line.strip() in ('{', '}'):
 			final.append(line)
 
 		elif line.lstrip().startswith('#'):
 			final.append(line)
 
-		elif len( line.strip() ) == 0:
+		elif i != len(lines)-1 and lines[i+1].strip() == '{':
 			final.append(line)
 
 		else:
@@ -60,15 +43,30 @@ def semicolonify(txt):
 
 def bracify(txt):
 
+
+	def prefix_tab_cnt(txt):
+
+		if len( txt.strip() ) == 0:
+			return 0
+
+		if txt.startswith('\t'):
+			return len(txt) - len(txt.lstrip())
+
+		if txt.startswith(' '):
+			return (len(txt) - len(txt.lstrip()))//4
+
+		return 0
+
+
 	def format_braces(n1, n2, brace_type):
 
 		final = []
 
-		if n1 <= n2:
+		if n1 < n2:
 			for i in range(n1, n2):
 				final.append(i*'\t' + brace_type)
 
-		else:
+		elif n1 > n2:
 			for i in range(n1, n2, -1):
 				final.append(i*'\t' + brace_type)
 
@@ -84,22 +82,17 @@ def bracify(txt):
 
 		if i == 0:
 			last_tab_cnt = prefix_tab_cnt(line)
-			continue
-
-		if len( line.strip() ) == 0 and i != len(lines)-1:
 			final.append(line)
 			continue
 
 		line_tab_cnt = prefix_tab_cnt(line)
 
-		diff = line_tab_cnt - last_tab_cnt
-
-		if diff > 0:
+		if line_tab_cnt > last_tab_cnt:
 
 			final.extend(format_braces(last_tab_cnt, line_tab_cnt, '{'))
 			final.append(line)
 
-		elif diff < 0:
+		elif line_tab_cnt < last_tab_cnt:
 
 			final.extend(format_braces(last_tab_cnt-1, line_tab_cnt-1, '}'))
 			final.append(line)
@@ -116,7 +109,12 @@ def bracify(txt):
 
 
 def uncurse(txt):
+
+	txt = uncommentify(txt)
 	
+	txt = '\n'.join([line for line in txt.splitlines() if not len(line.strip()) == 0])
+	# Remove empty lines
+
 	txt = bracify(txt)
 	txt = semicolonify(txt)
 
