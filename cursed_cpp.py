@@ -1,4 +1,18 @@
 
+def prefix_tab_cnt(txt):
+
+		if len( txt.strip() ) == 0:
+			return 0
+
+		if txt.startswith('\t'):
+			return len(txt) - len(txt.lstrip())
+
+		if txt.startswith(' '):
+			return (len(txt) - len(txt.lstrip()))//4
+
+		return 0
+
+
 
 def uncommentify(txt):
 	
@@ -39,26 +53,28 @@ def semicolonify(txt):
 				final.append(line + ';')
 
 
+
+	stck = []
+
+	for i, line in enumerate(final):
+
+		if line.lstrip().startswith('struct') or line.lstrip().startswith('class'):
+			stck.append( prefix_tab_cnt(line) )
+
+		elif line.strip() == '}':
+
+			if len(stck) > 0 and stck[-1] == prefix_tab_cnt(line):
+				stck.pop()
+				final[i] = line.rstrip() + ';'
+
+
+
+
 	return '\n'.join(final)
 
 
 
 def bracify(txt):
-
-
-	def prefix_tab_cnt(txt):
-
-		if len( txt.strip() ) == 0:
-			return 0
-
-		if txt.startswith('\t'):
-			return len(txt) - len(txt.lstrip())
-
-		if txt.startswith(' '):
-			return (len(txt) - len(txt.lstrip()))//4
-
-		return 0
-
 
 	def format_braces(n1, n2, brace_type):
 
@@ -110,7 +126,48 @@ def bracify(txt):
 
 
 
+
+def error_detection(txt):
+
+	def mixed_tabs_spaces(_txt):
+		spaces = False
+		tabs = False
+		for c in _txt:
+			if c == ' ':
+				spaces = True
+			elif c == '\t':
+				tabs = True
+			else:
+				break
+
+		return (spaces and tabs)
+
+
+
+	for i, line in enumerate(txt.splitlines()):
+
+		if mixed_tabs_spaces(line):
+			return (True, f'Error: Mixed tabs and spaces on line {i+1}')
+
+		elif line.startswith(' '):
+
+			if ( len(line) - len(line.lstrip()) ) % 4 != 0:
+				return (True, f'Error: Number of prefix spaces on line {i+1} not a multiple of 4')
+
+	return (False, '')
+
+
+
+
+
+
 def uncurse(txt):
+
+	is_error, error_text = error_detection(txt)
+	if is_error:
+		print('\n' + error_text)
+		return error_text
+
 
 	txt = uncommentify(txt)
 	
