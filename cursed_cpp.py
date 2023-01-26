@@ -1,4 +1,3 @@
-import sys
 
 
 def uncommentify(txt):
@@ -26,6 +25,9 @@ def semicolonify(txt):
 			final.append(line)
 
 		elif i != len(lines)-1 and lines[i+1].strip() == '{':
+			final.append(line)
+
+		elif line.rstrip().endswith(':'):
 			final.append(line)
 
 		else:
@@ -125,19 +127,18 @@ def uncurse(txt):
 
 if __name__ == '__main__':
 
-	if len(sys.argv) == 1:
+	import argparse
+
+	parser = argparse.ArgumentParser()
+
+	parser.add_argument('-f', '--file', help = 'input filename')
+
+	args = parser.parse_args()
+
+	if args.file:
+		with open(args.file, 'r') as f:
+			with open('uncursed_' + args.file, 'w') as f2:
+				f2.write(uncurse(f.read()))
+	else:
 		import clipboard
 		clipboard.copy(uncurse(clipboard.paste()))
-
-	elif len(sys.argv) == 2:
-		with open(sys.argv[1], 'r') as f:
-			with open('uncursed_' + sys.argv[1], 'w') as f2:
-				f2.write(uncurse(f.read()))
-
-	elif len(sys.argv) == 3:
-		with open(sys.argv[1], 'r') as f:
-			with open(sys.argv[2], 'w') as f2:
-				f2.write(uncurse(f.read()))
-
-	else:
-		print('\u001b[31m' + '\n[!] Invalid number of arguments [!]' + '\u001b[0m')
