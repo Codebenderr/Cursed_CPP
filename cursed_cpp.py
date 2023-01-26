@@ -2,9 +2,9 @@
 
 def uncommentify(txt):
 	
+	txt = ''.join([part.split('/*')[0] for part in txt.split('*/')])
+	
 	txt = '\n'.join([line.split('//')[0].rstrip() for line in txt.splitlines()])
-
-	txt = '\n'.join([part.split('/*')[0] for part in txt.split('*/')])
 
 	return txt
 
